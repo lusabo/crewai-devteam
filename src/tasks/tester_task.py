@@ -1,6 +1,6 @@
 from crewai import Task
-from src.agents.tester import go_test_specialist
-from src.tools.github import github_tool
+from agents.tester import go_test_specialist
+from tools.github import github_tool
 
 review_existing_tests = Task(
     description="Revisar os testes existentes no repositório para avaliar sua cobertura "

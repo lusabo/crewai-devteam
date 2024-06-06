@@ -1,6 +1,6 @@
 from crewai import Agent
 from config import llama3
-from src.tools.github import github_tool
+from tools.github import github_tool
 
 go_developer = Agent(
     role="Desenvolvedor de Software Experiente em Go",

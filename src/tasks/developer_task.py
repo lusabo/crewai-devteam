@@ -1,6 +1,6 @@
 from crewai import Task
-from src.agents.developer import go_developer
-from src.tools.github import github_tool
+from agents.developer import go_developer
+from tools.github import github_tool
 
 analyze_repository_architecture = Task(
     description="Analisar a arquitetura do repositório para identificar pontos de melhoria.",

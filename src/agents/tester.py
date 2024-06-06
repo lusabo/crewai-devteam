@@ -1,6 +1,6 @@
 from crewai import Agent
 from config import llama3
-from src.tools.github import github_tool
+from tools.github import github_tool
 
 go_test_specialist = Agent(
     role="Especialista em Testes em Go",
