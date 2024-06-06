@@ -7,6 +7,7 @@ from agents.tester import go_test_specialist
 from tasks.developer_task import analyze_repository_architecture
 from tasks.developer_task import identify_code_improvements
 from tasks.developer_task import suggest_refactorings
+from tasks.developer_task import consolidate_suggestions
 from tasks.tester_task import review_existing_tests
 from tasks.tester_task import identify_missing_tests
 from tasks.tester_task import write_unit_and_integration_tests
@@ -21,7 +22,8 @@ def main():
             suggest_refactorings,
             review_existing_tests,
             identify_missing_tests,
-            write_unit_and_integration_tests
+            write_unit_and_integration_tests,
+            consolidate_suggestions
         ],
         process=Process.sequential,
         verbose=True
