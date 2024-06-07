@@ -1,36 +1,46 @@
-import os
-import warnings
-from config import llama3
 from crewai import Crew, Process
-from agents.developer import go_developer
-from agents.tester import go_test_specialist
-from tasks.developer_task import analyze_repository_architecture
-from tasks.developer_task import identify_code_improvements
-from tasks.developer_task import suggest_refactorings
-from tasks.developer_task import consolidate_suggestions
-from tasks.tester_task import review_existing_tests
-from tasks.tester_task import identify_missing_tests
-from tasks.tester_task import write_unit_and_integration_tests
+from agents.developer import DeveloperAgent
+from agents.tester import TesterAgent
+from tasks.developer_task import DeveloperTasks
+from tasks.tester_task import TesterTasks
+from tools.tools import Tools
+class DeveloperTeamCrew:
+    
+    def run(self):
 
-def main():
+        #Tools
+        tools = [Tools().github_tool()]
+
+        #Agents
+        dev = DeveloperAgent(tools).developer()
+        tester = TesterAgent(tools).tester()
         
-    dev_crew = Crew(
-        agents=[go_developer, go_test_specialist],
-        tasks=[
-            analyze_repository_architecture,
-            identify_code_improvements,
-            suggest_refactorings,
-            review_existing_tests,
-            identify_missing_tests,
-            write_unit_and_integration_tests,
-            consolidate_suggestions
-        ],
-        process=Process.sequential,
-        verbose=True
-    )
+        #Tasks
+        dev_tasks = DeveloperTasks(tools, dev)
+        test_tasks = TesterTasks(tools, tester)
 
-    result = dev_crew.kickoff()
-    print(result)
+        crew = Crew(
+            agents=[dev, tester],
+            tasks=[dev_tasks.consolidate_suggestions(
+                        [dev_tasks.repository_review(), 
+                        test_tasks.enhance_test_coverage()]
+                   )],
+            process=Process.sequential,
+            verbose=True
+        )
 
+        result = crew.kickoff()
+        return result
+        
+
+# This is the main function that you will use to run your custom crew.
 if __name__ == "__main__":
-    main()
+    print("\n-------------------------------")
+    print("## Team starting with full steam.")
+    print("-------------------------------")
+    devteam_crew = DeveloperTeamCrew()
+    result = devteam_crew.run()
+    print("\n\n########################")
+    print("## Here is you custom crew run result:")
+    print("########################\n")
+    print(result)

@@ -1,17 +1,23 @@
 from crewai import Agent
-from config import llama3
-from tools.github import github_tool
+from config import EnvConfig
 
-go_developer = Agent(
-    role="Desenvolvedor de Software Experiente em Go",
-    goal="Analisar e melhorar a arquitetura e o código do projeto Go",
-    backstory="Este agente é um desenvolvedor de software experiente "
-              "com profunda familiaridade com a linguagem Go. Ele é "
-              "capaz de analisar repositórios de código, identificar "
-              "pontos de melhoria na arquitetura e sugerir refatorações "
-              "para melhorar a qualidade e a eficiência do código.",
-    allow_delegation=False,
-    tools=[github_tool], 
-    verbose=True,
-    llm=llama3
-)
+class DeveloperAgent:
+
+    def __init__(self, tools):
+        self.tools = tools
+
+    def developer(self):
+        return Agent(
+            role="Experienced Software Developer in Go",
+            goal="Analyze and provide improvements to the architecture "
+                 "and code of the Go project contained in the provided repository.",
+            backstory="This agent is an experienced software developer"
+                      "with deep familiarity with the Go language. He is "
+                      "able to analyze code repositories, identify "
+                      "points for improvement in the architecture and suggest "
+                      "refactorings to improve code quality.",
+            allow_delegation=False,
+            tools=self.tools, 
+            verbose=True,
+            llm=EnvConfig().get_llama3()
+        )
