@@ -16,15 +16,13 @@ class DeveloperTeamCrew:
         tester = TesterAgent(tools).tester()
         
         #Tasks
-        dev_tasks = DeveloperTasks(tools, dev)
-        test_tasks = TesterTasks(tools, tester)
+        repo_review_tasks = DeveloperTasks(tools, dev).repository_review()
+        enhance_test_tasks = TesterTasks(tools, tester).enhance_test_coverage()
+        consolidate_task = DeveloperTasks(tools, dev).consolidate_suggestions([repo_review_tasks, enhance_test_tasks])
 
         crew = Crew(
             agents=[dev, tester],
-            tasks=[dev_tasks.consolidate_suggestions(
-                        [dev_tasks.repository_review(), 
-                        test_tasks.enhance_test_coverage()]
-                   )],
+            tasks=[repo_review_tasks, enhance_test_tasks, consolidate_task],
             process=Process.sequential,
             verbose=True
         )

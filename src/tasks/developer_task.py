@@ -6,6 +6,7 @@ class DeveloperTasks:
     def __init__(self, tools, agent):
         self.tools = tools
         self.agent = agent
+        self.tester_task = TesterTasks(self.tools, self.agent).enhance_test_coverage()
 
     def repository_review(self):
         return Task(
@@ -20,10 +21,10 @@ class DeveloperTasks:
             agent=self.agent
         )
 
-    def consolidate_suggestions(self, tasks: any):
+    def consolidate_suggestions(self, ctx: any):
         return Task(
             description="Consolidate all the information made by me and the tester.",
             expected_output="Consolidated plan in markdown format.",
             agent=self.agent,
-            context=tasks
+            context=ctx
         )
